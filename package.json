@@ -1,6 +1,6 @@
 {
   "name": "mcp-plugin",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "MCP Plugin with tool configurations",
   "main": "dist/index.js",
   "bin": {
@@ -17,8 +17,9 @@
     "plugin",
     "tools"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "shadow",
+  "repository": "https://github.com/shadowcz007/mcp-plugin",
+  "license": "Apache",
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^11.1.0",
@@ -37,5 +38,10 @@
   },
   "peerDependencies": {
     "zod": "^3.22.4"
-  }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ]
 }
