@@ -1,0 +1,29 @@
+{
+  "name": "mcp-plugin",
+  "version": "1.0.0",
+  "description": "MCP Plugin with tool configurations",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "plugin",
+    "tools"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.24",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3",
+    "zod": "^3.25.28"
+  },
+  "peerDependencies": {
+    "zod": "^3.22.4"
+  }
+}
