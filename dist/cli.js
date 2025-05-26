@@ -15,13 +15,13 @@ program
     .version('1.0.0');
 // 添加 init 命令
 program
-    .command('init')
-    .description('Initialize a new MCP project')
+    .command('init [path]')
+    .description('Initialize a new MCP project. Use "." to create in current directory')
     .option('-t, --template <template>', 'Template to use', 'default')
-    .action(async (options) => {
+    .action(async (path, options) => {
     console.log(chalk_1.default.blue('🚀 Starting project initialization...'));
     try {
-        await (0, init_1.init)(options);
+        await (0, init_1.init)({ ...options, path });
         console.log(chalk_1.default.green('✨ Project initialized successfully!'));
     }
     catch (error) {

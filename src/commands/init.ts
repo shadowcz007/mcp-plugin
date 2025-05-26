@@ -13,15 +13,32 @@ interface ProjectAnswers {
   author: string;
 }
 
-export async function init(options: InitOptions): Promise<void> {
-  // 获取项目信息
+export async function init(options: InitOptions & { path?: string }): Promise<void> {
+  let targetDir: string;
+  let projectName: string;
+
+  if (options.path === '.') {
+    // 如果指定了 "." 参数，直接在当前目录创建
+    targetDir = process.cwd();
+    projectName = path.basename(targetDir);
+  } else {
+    // 如果没有指定路径，先询问项目名称
+    const { name } = await inquirer.prompt<{ name: string }>([
+      {
+        type: 'input',
+        name: 'name',
+        message: 'Project name:',
+        default: path.basename(process.cwd()),
+      }
+    ]);
+    projectName = name;
+    targetDir = path.join(process.cwd(), name);
+    // 创建项目目录
+    await fs.ensureDir(targetDir);
+  }
+
+  // 继续询问其他信息
   const answers = await inquirer.prompt<ProjectAnswers>([
-    {
-      type: 'input',
-      name: 'name',
-      message: 'Project name:',
-      default: path.basename(process.cwd()),
-    },
     {
       type: 'input',
       name: 'description',
@@ -34,6 +51,8 @@ export async function init(options: InitOptions): Promise<void> {
     },
   ]);
 
+  answers.name = projectName; // 使用之前确定的项目名称
+
   // 获取当前包的根目录
   const pkgPath = path.resolve(__dirname, '../../package.json');
   const pkgDir = path.dirname(pkgPath);
@@ -42,8 +61,6 @@ export async function init(options: InitOptions): Promise<void> {
   console.log('Debug - Package directory:', pkgDir);
   console.log('Debug - Template directory:', templateDir);
   
-  const targetDir = process.cwd();
-
   try {
     // 检查模板是否存在
     if (!await fs.pathExists(templateDir)) {
