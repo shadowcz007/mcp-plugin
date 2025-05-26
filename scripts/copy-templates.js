@@ -6,7 +6,7 @@ const destDir = path.join(__dirname, '../dist/templates');
 
 async function copyTemplates() {
   try {
-    await fs.copy(srcDir, destDir);
+    await fs.copy(srcDir, destDir );
     console.log('Templates copied successfully!');
   } catch (err) {
     console.error('Error copying templates:', err);
@@ -14,4 +14,4 @@ async function copyTemplates() {
   }
 }
 
-copyTemplates(); 
+copyTemplates();

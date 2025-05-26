@@ -3,7 +3,7 @@
     "target": "es2020",
     "module": "commonjs",
     "lib": ["es2020"],
-    "declaration": true,
+    "declaration": false,
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
