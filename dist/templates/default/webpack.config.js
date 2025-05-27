@@ -2,7 +2,7 @@ const path = require('path')
 const package = require('./package.json')
 module.exports = {
   entry: './src/index.ts',
-  mode: 'development',
+  mode: 'production',
   module: {
     rules: [
       {
