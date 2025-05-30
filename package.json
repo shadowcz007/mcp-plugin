@@ -1,6 +1,6 @@
 {
   "name": "mcp-plugin",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "MCP Plugin with tool configurations",
   "main": "dist/index.js",
   "bin": {
