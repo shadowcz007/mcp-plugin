@@ -56,7 +56,7 @@ async function init(options) {
                 type: 'input',
                 name: 'name',
                 message: 'Project name:',
-                default: path.basename(process.cwd()),
+                default: path.basename(process.cwd())
             }
         ]);
         projectName = name;
@@ -69,13 +69,13 @@ async function init(options) {
         {
             type: 'input',
             name: 'description',
-            message: 'Project description:',
+            message: 'Project description:'
         },
         {
             type: 'input',
             name: 'author',
-            message: 'Author:',
-        },
+            message: 'Author:'
+        }
     ]);
     answers.name = projectName; // 使用之前确定的项目名称
     // 获取当前包的根目录
@@ -86,13 +86,16 @@ async function init(options) {
     console.log('Debug - Template directory:', templateDir);
     try {
         // 检查模板是否存在
-        if (!await fs.pathExists(templateDir)) {
+        if (!(await fs.pathExists(templateDir))) {
             throw new Error(`Template "${options.template}" not found at ${templateDir}`);
         }
         // 复制模板文件
         await fs.copy(templateDir, targetDir, {
-            filter: (src) => {
+            filter: src => {
                 const basename = path.basename(src);
+                if (basename === '.gitignore') {
+                    return true; // 显式包含 .gitignore 文件
+                }
                 return basename !== 'node_modules' && basename !== '.git';
             }
         });
@@ -104,7 +107,7 @@ async function init(options) {
                 ...packageJson,
                 name: answers.name,
                 description: answers.description,
-                author: answers.author,
+                author: answers.author
             };
             await fs.writeJson(packageJsonPath, updatedPackageJson, { spaces: 2 });
         }
