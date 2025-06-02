@@ -6,7 +6,7 @@ export const hello = {
   schema: {
     message: z.string().describe('message')
   },
-  handler: async (args: any, exe_tools: any, sendNotification: any) => {
+  handler: async (args: any, client: any, sendNotification: any) => {
     console.log(args)
     return {
       content: [{ type: 'text', text: `Echo: ${JSON.stringify(args)}` }]

@@ -1,11 +1,11 @@
 import { z as zod } from 'zod'
 import { tools } from './tools'
 
-interface ExeTools {
+interface Client {
   callTool: (toolName: string, args: any) => Promise<any>
-  hasToolAvailable: (toolName: string) => boolean
-  listTools: () => Array<any>
-  findTool: (toolName: string) => any
+  hasToolAvailable: (toolName: string) => Promise<boolean>
+  listTools: () => Promise<Array<any>>
+  findTool: (toolName: string) => Promise<any>
 }
 
 interface Server {
@@ -15,7 +15,7 @@ interface Server {
     schema: Record<string, any>,
     handler: (args: any, { sendNotification }: { sendNotification: any }) => Promise<any>
   ) => void
-  _exe_tools: ExeTools
+  _client: Client
   _sendLoggingMessage: (message: any) => void
 }
 
@@ -42,7 +42,7 @@ export function configureMcp (
         tool.description,
         tool.schema,
         (args: any, { sendNotification }) => {
-          return tool.handler(args, server._exe_tools, sendNotification)
+          return tool.handler(args, server._client, sendNotification)
         }
       )
 
