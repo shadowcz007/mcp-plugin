@@ -47,35 +47,6 @@ mcp-plugin init -t template-name
 项目描述 | Project description
 作者信息 | Author information
 
-### 项目开发 | Project Development
-
-中文 | English
----|---
-1. 进入项目目录：| 1. Enter project directory:
-```bash
-cd your-project-name
-```
-
-2. 安装依赖：| 2. Install dependencies:
-```bash
-npm install
-```
-
-3. 开发模式：| 3. Development mode:
-```bash
-npm run dev
-```
-
-4. 构建项目：| 4. Build project:
-```bash
-npm run build
-```
-
-5. 运行测试：| 5. Run tests:
-```bash
-npm test
-```
-
 ### 与 MCP Server 集成 | Integration with MCP Server
 
 中文：构建完成后，可以通过以下方式启动 MCP Server 并加载你的插件：
@@ -102,6 +73,8 @@ mcp-plugin create
 - 中间区域实时预览生成的 TypeScript 工具代码和参数示例。| The center area previews the generated TypeScript tool code and parameter example in real time.
 - 右侧可选择常用模板快速开始。| The right area provides common templates for quick start.
 - 点击"Copy Code" to copy the generated code, then paste it into your project's `src/tools` directory for use.
+
+[通过表单创建工具](./assets/tool.png)
 
 ## 默认模板工具示例 | Default Template Tool Examples
 
@@ -162,6 +135,38 @@ server.tool(
   }
 )
 ```
+
+
+
+### 项目开发 | Project Development
+
+中文 | English
+---|---
+1. 进入项目目录：| 1. Enter project directory:
+```bash
+cd your-project-name
+```
+
+2. 安装依赖：| 2. Install dependencies:
+```bash
+npm install
+```
+
+3. 开发模式：| 3. Development mode:
+```bash
+npm run dev
+```
+
+4. 构建项目：| 4. Build project:
+```bash
+npm run build
+```
+
+5. 运行测试：| 5. Run tests:
+```bash
+npm test
+```
+
 
 ## 许可证 | License
 

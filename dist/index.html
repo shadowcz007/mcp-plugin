@@ -430,56 +430,76 @@
                 <p>选择预设模板快速开始：</p>
 
                 <div class="template-grid">
-                    <div class="template-card" data-template="mcp-tool">
+                    <div class="template-card" data-template="persona">
                         <div class="template-icon">
-                            <i class="fas fa-plug"></i>
+                            <i class="fas fa-user-circle"></i>
                         </div>
-                        <div class="template-name">Hello World</div>
-                        <div class="template-desc">基础MCP工具模板</div>
+                        <div class="template-name">个人档案</div>
+                        <div class="template-desc">name, gender, personality, bio</div>
                     </div>
 
-                    <div class="template-card" data-template="user">
+                    <div class="template-card" data-template="memory">
                         <div class="template-icon">
-                            <i class="fas fa-user"></i>
+                            <i class="fas fa-brain"></i>
                         </div>
-                        <div class="template-name">用户管理</div>
-                        <div class="template-desc">用户相关工具模板</div>
+                        <div class="template-name">记忆管理</div>
+                        <div class="template-desc">content, type, importance, keywords</div>
                     </div>
 
-                    <div class="template-card" data-template="product">
+                    <div class="template-card" data-template="viewpoint">
                         <div class="template-icon">
-                            <i class="fas fa-shopping-bag"></i>
+                            <i class="fas fa-comment-dots"></i>
                         </div>
-                        <div class="template-name">商品模型</div>
-                        <div class="template-desc">id, title, price, inStock
-                        </div>
+                        <div class="template-name">观点立场</div>
+                        <div class="template-desc">content, source, keywords, references</div>
                     </div>
 
-                    <div class="template-card" data-template="address">
+                    <div class="template-card" data-template="goal">
                         <div class="template-icon">
-                            <i class="fas fa-map-marker-alt"></i>
+                            <i class="fas fa-bullseye"></i>
                         </div>
-                        <div class="template-name">地址模型</div>
-                        <div class="template-desc">street, city, zip, country
-                        </div>
+                        <div class="template-name">目标管理</div>
+                        <div class="template-desc">content, type, deadline, status</div>
                     </div>
 
-                    <div class="template-card" data-template="settings">
+                    <div class="template-card" data-template="counselor">
+                        <div class="template-icon">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <div class="template-name">心理咨询师</div>
+                        <div class="template-desc">session_type, client_info, notes</div>
+                    </div>
+
+                    <div class="template-card" data-template="teacher">
+                        <div class="template-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="template-name">教师工具</div>
+                        <div class="template-desc">lesson_plan, student_feedback, assessment</div>
+                    </div>
+
+                    <div class="template-card" data-template="doctor">
+                        <div class="template-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="template-name">医生工具</div>
+                        <div class="template-desc">patient_record, diagnosis, treatment</div>
+                    </div>
+
+                    <div class="template-card" data-template="lawyer">
+                        <div class="template-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <div class="template-name">律师工具</div>
+                        <div class="template-desc">case_info, legal_analysis, documents</div>
+                    </div>
+
+                    <div class="template-card" data-template="user_preferences">
                         <div class="template-icon">
                             <i class="fas fa-cog"></i>
                         </div>
-                        <div class="template-name">设置模型</div>
-                        <div class="template-desc">theme, notifications, language
-                        </div>
-                    </div>
-
-                    <div class="template-card" data-template="blog">
-                        <div class="template-icon">
-                            <i class="fas fa-blog"></i>
-                        </div>
-                        <div class="template-name">博客模型</div>
-                        <div class="template-desc">title, content, tags, published
-                        </div>
+                        <div class="template-name">用户偏好</div>
+                        <div class="template-desc">theme, language, notifications</div>
                     </div>
 
                     <div class="template-card" data-template="empty">
@@ -718,11 +738,21 @@
             toolCode += `  name: '${toolName}',\n`;
             toolCode += `  description: '${toolDescription}',\n`;
             toolCode += `  schema: ${schemaCode},\n`;
-            toolCode += `  handler: async (args: any, client: any, sendNotification: any) => {\n`;
+            toolCode += `  handler: async (\n`;
+            toolCode += `    args: any,\n`;
+            toolCode += `    client: any,\n`;
+            toolCode += `    sendNotification: any\n`;
+            toolCode += `  ) => {\n`;
+            toolCode += `    // 打印工具参数\n`;
             toolCode += `    console.log('工具参数:', args);\n\n`;
-            toolCode += `    // 在这里实现工具逻辑\n`;
+            toolCode += `    // TODO: 在这里实现工具逻辑\n\n`;
             toolCode += `    return {\n`;
-            toolCode += `      content: [{ type: 'text', text: \`处理结果: \${JSON.stringify(args)}\` }]\n`;
+            toolCode += `      content: [\n`;
+            toolCode += `        {\n`;
+            toolCode += `          type: 'text',\n`;
+            toolCode += `          text: \`处理结果: \${JSON.stringify(args)}\`\n`;
+            toolCode += `        }\n`;
+            toolCode += `      ]\n`;
             toolCode += `    };\n`;
             toolCode += `  }\n`;
             toolCode += `};\n`;
@@ -771,62 +801,146 @@
         // 应用模板
         function applyTemplate(template) {
             switch(template) {
-                case 'mcp-tool':
+                case 'persona':
                     fields = [
-                        { name: 'message', type: 'string', description: '消息内容', isOptional: false }
+                        { name: 'name', type: 'string', description: '姓名', isOptional: false },
+                        { name: 'gender', type: 'enum', description: '性别', isOptional: true, options: ['男', '女', '其他'] },
+                        { name: 'personality', type: 'string', description: '性格描述', isOptional: true },
+                        { name: 'avatar_url', type: 'string', description: '头像URL', isOptional: true },
+                        { name: 'bio', type: 'string', description: '个人简介', isOptional: true },
+                        { name: 'privacy_level', type: 'enum', description: '隐私级别', isOptional: false, options: ['public', 'private'] }
                     ];
-                    toolNameInput.value = 'hello';
-                    toolDescriptionInput.value = 'Hello World示例工具';
+                    toolNameInput.value = 'personaManager';
+                    toolDescriptionInput.value = '个人档案管理工具';
                     break;
-                    
-                case 'user':
+
+                case 'memory':
                     fields = [
-                        { name: 'id', type: 'number', description: '用户唯一标识', isOptional: false },
-                        { name: 'username', type: 'string', description: '用户名', isOptional: false },
-                        { name: 'email', type: 'string', description: '电子邮件地址', isOptional: false },
-                        { name: 'role', type: 'enum', description: '用户角色', isOptional: true, options: ['admin', 'user', 'guest'] },
-                        { name: 'isActive', type: 'boolean', description: '是否激活', isOptional: true }
+                        { name: 'content', type: 'string', description: '记忆内容', isOptional: false },
+                        { name: 'memory_type', type: 'enum', description: '记忆类型', isOptional: false, 
+                          options: ['experience', 'event', 'learning', 'interaction', 'achievement', 'mistake'] },
+                        { name: 'importance', type: 'number', description: '重要程度(1-10)', isOptional: false },
+                        { name: 'related_people', type: 'string', description: '相关人物', isOptional: true },
+                        { name: 'location', type: 'string', description: '地点', isOptional: true },
+                        { name: 'memory_date', type: 'date', description: '记忆日期', isOptional: true },
+                        { name: 'keywords', type: 'string', description: '关键词(逗号分隔)', isOptional: false },
+                        { name: 'source_app', type: 'string', description: '来源应用', isOptional: false },
+                        { name: 'reference_urls', type: 'string', description: '参考链接(逗号分隔)', isOptional: true },
+                        { name: 'privacy_level', type: 'enum', description: '隐私级别', isOptional: false, options: ['public', 'private'] }
                     ];
-                    toolNameInput.value = 'userManager';
-                    toolDescriptionInput.value = '用户管理工具';
+                    toolNameInput.value = 'memoryManager';
+                    toolDescriptionInput.value = '记忆管理工具';
                     break;
-                    
-                case 'product':
+
+                case 'viewpoint':
                     fields = [
-                        { name: 'id', type: 'number', description: '产品ID', isOptional: false },
-                        { name: 'title', type: 'string', description: '产品标题', isOptional: false },
-                        { name: 'description', type: 'string', description: '产品描述', isOptional: true },
-                        { name: 'price', type: 'number', description: '产品价格', isOptional: false },
-                        { name: 'inStock', type: 'boolean', description: '是否有库存', isOptional: false }
+                        { name: 'content', type: 'string', description: '观点内容', isOptional: false },
+                        { name: 'source_people', type: 'string', description: '来源人物', isOptional: true },
+                        { name: 'related_event', type: 'string', description: '相关事件', isOptional: true },
+                        { name: 'keywords', type: 'string', description: '关键词(逗号分隔)', isOptional: false },
+                        { name: 'reference_urls', type: 'string', description: '参考链接(逗号分隔)', isOptional: true },
+                        { name: 'privacy_level', type: 'enum', description: '隐私级别', isOptional: false, options: ['public', 'private'] }
                     ];
+                    toolNameInput.value = 'viewpointManager';
+                    toolDescriptionInput.value = '观点立场管理工具';
                     break;
-                    
-                case 'address':
+
+                case 'goal':
                     fields = [
-                        { name: 'street', type: 'string', description: '街道地址', isOptional: false },
-                        { name: 'city', type: 'string', description: '城市', isOptional: false },
-                        { name: 'zipCode', type: 'string', description: '邮政编码', isOptional: false },
-                        { name: 'country', type: 'string', description: '国家', isOptional: false }
+                        { name: 'content', type: 'string', description: '目标内容', isOptional: false },
+                        { name: 'type', type: 'enum', description: '目标类型', isOptional: false, 
+                          options: ['long_term', 'short_term', 'plan', 'todo'] },
+                        { name: 'deadline', type: 'date', description: '截止日期', isOptional: true },
+                        { name: 'status', type: 'enum', description: '状态', isOptional: false, 
+                          options: ['planning', 'in_progress', 'completed', 'abandoned'] },
+                        { name: 'keywords', type: 'string', description: '关键词(逗号分隔)', isOptional: false },
+                        { name: 'privacy_level', type: 'enum', description: '隐私级别', isOptional: false, options: ['public', 'private'] }
                     ];
+                    toolNameInput.value = 'goalManager';
+                    toolDescriptionInput.value = '目标管理工具';
                     break;
-                    
-                case 'settings':
+
+                case 'counselor':
                     fields = [
-                        { name: 'theme', type: 'enum', description: '主题设置', isOptional: false, options: ['light', 'dark', 'system'] },
+                        { name: 'session_type', type: 'enum', description: '咨询类型', isOptional: false, 
+                          options: ['individual', 'group', 'couple', 'family'] },
+                        { name: 'client_info', type: 'string', description: '客户信息', isOptional: false },
+                        { name: 'session_date', type: 'date', description: '咨询日期', isOptional: false },
+                        { name: 'duration', type: 'number', description: '咨询时长(分钟)', isOptional: false },
+                        { name: 'notes', type: 'string', description: '咨询记录', isOptional: false },
+                        { name: 'recommendations', type: 'string', description: '建议', isOptional: true },
+                        { name: 'follow_up_date', type: 'date', description: '跟进日期', isOptional: true }
+                    ];
+                    toolNameInput.value = 'counselorTool';
+                    toolDescriptionInput.value = '心理咨询师工具';
+                    break;
+
+                case 'teacher':
+                    fields = [
+                        { name: 'lesson_title', type: 'string', description: '课程标题', isOptional: false },
+                        { name: 'subject', type: 'string', description: '学科', isOptional: false },
+                        { name: 'grade_level', type: 'string', description: '年级', isOptional: false },
+                        { name: 'lesson_objectives', type: 'string', description: '教学目标', isOptional: false },
+                        { name: 'materials', type: 'string', description: '教学材料', isOptional: true },
+                        { name: 'activities', type: 'string', description: '课堂活动', isOptional: false },
+                        { name: 'assessment_method', type: 'string', description: '评估方法', isOptional: true },
+                        { name: 'homework', type: 'string', description: '作业', isOptional: true }
+                    ];
+                    toolNameInput.value = 'teacherTool';
+                    toolDescriptionInput.value = '教师教学工具';
+                    break;
+
+                case 'doctor':
+                    fields = [
+                        { name: 'patient_id', type: 'string', description: '病人ID', isOptional: false },
+                        { name: 'visit_date', type: 'date', description: '就诊日期', isOptional: false },
+                        { name: 'symptoms', type: 'string', description: '症状描述', isOptional: false },
+                        { name: 'diagnosis', type: 'string', description: '诊断结果', isOptional: false },
+                        { name: 'treatment_plan', type: 'string', description: '治疗方案', isOptional: false },
+                        { name: 'prescription', type: 'string', description: '处方', isOptional: true },
+                        { name: 'follow_up_date', type: 'date', description: '复诊日期', isOptional: true },
+                        { name: 'notes', type: 'string', description: '备注', isOptional: true }
+                    ];
+                    toolNameInput.value = 'doctorTool';
+                    toolDescriptionInput.value = '医生诊疗工具';
+                    break;
+
+                case 'lawyer':
+                    fields = [
+                        { name: 'case_number', type: 'string', description: '案件编号', isOptional: false },
+                        { name: 'case_type', type: 'enum', description: '案件类型', isOptional: false, 
+                          options: ['civil', 'criminal', 'corporate', 'family', 'intellectual_property'] },
+                        { name: 'client_info', type: 'string', description: '客户信息', isOptional: false },
+                        { name: 'opposing_party', type: 'string', description: '对方当事人', isOptional: true },
+                        { name: 'case_summary', type: 'string', description: '案件概要', isOptional: false },
+                        { name: 'legal_analysis', type: 'string', description: '法律分析', isOptional: false },
+                        { name: 'next_steps', type: 'string', description: '下一步行动', isOptional: false },
+                        { name: 'deadline', type: 'date', description: '截止日期', isOptional: true }
+                    ];
+                    toolNameInput.value = 'lawyerTool';
+                    toolDescriptionInput.value = '律师案件管理工具';
+                    break;
+
+                case 'user_preferences':
+                    fields = [
+                        { name: 'theme', type: 'enum', description: '主题设置', isOptional: false, 
+                          options: ['light', 'dark', 'system'] },
+                        { name: 'language', type: 'enum', description: '界面语言', isOptional: false, 
+                          options: ['zh-CN', 'en-US', 'ja-JP', 'ko-KR'] },
                         { name: 'notifications', type: 'boolean', description: '是否启用通知', isOptional: false },
-                        { name: 'language', type: 'enum', description: '界面语言', isOptional: false, options: ['zh-CN', 'en-US', 'es-ES'] }
+                        { name: 'notification_types', type: 'enum', description: '通知类型', isOptional: true, 
+                          options: ['all', 'important', 'none'] },
+                        { name: 'timezone', type: 'string', description: '时区设置', isOptional: true },
+                        { name: 'font_size', type: 'enum', description: '字体大小', isOptional: true, 
+                          options: ['small', 'medium', 'large'] },
+                        { name: 'auto_save', type: 'boolean', description: '自动保存', isOptional: true },
+                        { name: 'privacy_level', type: 'enum', description: '隐私级别', isOptional: false, 
+                          options: ['public', 'private'] }
                     ];
+                    toolNameInput.value = 'userPreferences';
+                    toolDescriptionInput.value = '用户偏好设置工具';
                     break;
-                    
-                case 'blog':
-                    fields = [
-                        { name: 'title', type: 'string', description: '文章标题', isOptional: false },
-                        { name: 'content', type: 'string', description: '文章内容', isOptional: false },
-                        { name: 'tags', type: 'string', description: '标签（逗号分隔）', isOptional: true },
-                        { name: 'publishedAt', type: 'date', description: '发布日期', isOptional: false }
-                    ];
-                    break;
-                    
+
                 case 'empty':
                     fields = [];
                     break;

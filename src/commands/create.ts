@@ -10,7 +10,7 @@ interface CreateOptions {
 export async function create(options: CreateOptions = {}) {
   const port = options.port || 3366;
   const app = express();
-   console.log(resolve(__filename, '../../'))
+  //  console.log(resolve(__filename, '../../'))
   // 设置静态文件服务
   app.use(express.static(resolve(__filename, '../../')));
   
