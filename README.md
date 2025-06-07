@@ -74,7 +74,7 @@ mcp-plugin create
 - 右侧可选择常用模板快速开始。| The right area provides common templates for quick start.
 - 点击"Copy Code" to copy the generated code, then paste it into your project's `src/tools` directory for use.
 
-[通过表单创建工具](./assets/tool.png)
+![通过表单创建工具](./assets/tool.png)
 
 ## 默认模板工具示例 | Default Template Tool Examples
 
