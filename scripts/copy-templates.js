@@ -15,3 +15,10 @@ async function copyTemplates() {
 }
 
 copyTemplates();
+
+const srcHtmlPath = path.join(__dirname, '../src/index.html');
+const destHtmlPath = path.join(__dirname, '../dist/index.html');
+
+fs.copy(srcHtmlPath, destHtmlPath);
+
+

@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Plugin 工具生成器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+         :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --border: #dee2e6;
+            --code-bg: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0 30px;
+        }
+        
+        header h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        header p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            height: 100%;
+        }
+        
+        .panel h2 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .panel h2 i {
+            font-size: 1.2em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background: #d11467;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .fields-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px;
+        }
+        
+        .field-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .field-item:last-child {
+            border-bottom: none;
+        }
+        
+        .field-info {
+            flex: 1;
+        }
+        
+        .field-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .field-type {
+            color: var(--gray);
+            font-size: 0.9em;
+        }
+        
+        .field-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-icon {
+            padding: 8px;
+            border-radius: 50%;
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--gray);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-icon:hover {
+            background: #f8f9fa;
+        }
+        
+        .code-container {
+            background: var(--code-bg);
+            border-radius: 6px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .template-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .template-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .template-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .template-desc {
+            font-size: 0.85em;
+            color: var(--gray);
+        }
+        
+        .no-fields {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+        }
+        
+        .no-fields i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ced4da;
+        }
+        
+        .property-indicator {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-left: 8px;
+        }
+        
+        .optional {
+            background: #e7f4e4;
+            color: #2e7d32;
+        }
+        
+        .required {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .highlight {
+            color: #d63384;
+            font-weight: 600;
+        }
+        
+        .keyword {
+            color: #d63384;
+        }
+        
+        .type {
+            color: #22863a;
+        }
+        
+        .string {
+            color: #032f62;
+        }
+        
+        .comment {
+            color: #6a737d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-plug"></i> MCP Plugin 工具生成器</h1>
+            <p>通过表单创建MCP Plugin工具代码，自动生成符合规范的TypeScript代码</p>
+        </header>
+
+        <div class="main-content">
+            <!-- 左侧：表单区域 -->
+            <div class="panel">
+                <h2><i class="fas fa-plug"></i> 工具定义</h2>
+
+                <div class="form-group">
+                    <label for="tool-name">工具名称</label>
+                    <input type="text" id="tool-name" placeholder="例如: hello">
+                </div>
+
+                <div class="form-group">
+                    <label for="tool-description">工具描述</label>
+                    <input type="text" id="tool-description" placeholder="工具的功能描述">
+                </div>
+
+                <h3 class="sub-title"><i class="fas fa-plus-circle"></i> 参数定义</h3>
+
+                <div class="form-group">
+                    <label for="field-name">字段名</label>
+                    <input type="text" id="field-name" placeholder="例如: username">
+                </div>
+
+                <div class="form-group">
+                    <label for="field-type">数据类型</label>
+                    <select id="field-type">
+                            <option value="string">字符串 (string)</option>
+                            <option value="number">数字 (number)</option>
+                            <option value="boolean">布尔值 (boolean)</option>
+                            <option value="date">日期 (date)</option>
+                            <option value="enum">枚举 (enum)</option>
+                        </select>
+                </div>
+
+                <div class="form-group" id="enum-options-group" style="display: none;">
+                    <label for="enum-options">枚举选项 (逗号分隔)</label>
+                    <input type="text" id="enum-options" placeholder="例如: admin, user, guest">
+                </div>
+
+                <div class="form-group">
+                    <label for="field-description">描述</label>
+                    <input type="text" id="field-description" placeholder="字段描述信息">
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="field-optional">
+                    <label for="field-optional">可选字段</label>
+                </div>
+
+                <button id="add-field-btn" class="btn btn-block">
+                        <i class="fas fa-plus"></i> 添加字段
+                    </button>
+
+                <div class="fields-list" id="fields-container">
+                    <div class="no-fields" id="no-fields-message">
+                        <i class="fas fa-folder-open"></i>
+                        <p>尚未添加任何字段</p>
+                    </div>
+                </div>
+
+                <button id="clear-all-btn" class="btn btn-danger btn-block">
+                        <i class="fas fa-trash-alt"></i> 清除所有字段
+                    </button>
+            </div>
+
+            <!-- 中间：预览区域 -->
+            <div class="panel">
+                <h2><i class="fas fa-code"></i> 工具代码预览</h2>
+
+                <div class="code-header">
+                    <h3>生成的工具代码</h3>
+                    <button id="copy-code-btn" class="btn">
+                        <i class="fas fa-copy"></i> 复制代码
+                    </button>
+                </div>
+
+                <div class="code-container" id="zod-output">
+                    // 添加字段后，工具代码将显示在这里
+                </div>
+
+                <div class="code-header" style="margin-top: 30px;">
+                    <h3>参数示例</h3>
+                </div>
+
+                <div class="code-container" id="json-output">
+                    {}
+                </div>
+            </div>
+
+            <!-- 右侧：模板区域 -->
+            <div class="panel">
+                <h2><i class="fas fa-clone"></i> 模板库</h2>
+                <p>选择预设模板快速开始：</p>
+
+                <div class="template-grid">
+                    <div class="template-card" data-template="mcp-tool">
+                        <div class="template-icon">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <div class="template-name">Hello World</div>
+                        <div class="template-desc">基础MCP工具模板</div>
+                    </div>
+
+                    <div class="template-card" data-template="user">
+                        <div class="template-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="template-name">用户管理</div>
+                        <div class="template-desc">用户相关工具模板</div>
+                    </div>
+
+                    <div class="template-card" data-template="product">
+                        <div class="template-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div class="template-name">商品模型</div>
+                        <div class="template-desc">id, title, price, inStock
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-template="address">
+                        <div class="template-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="template-name">地址模型</div>
+                        <div class="template-desc">street, city, zip, country
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-template="settings">
+                        <div class="template-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="template-name">设置模型</div>
+                        <div class="template-desc">theme, notifications, language
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-template="blog">
+                        <div class="template-icon">
+                            <i class="fas fa-blog"></i>
+                        </div>
+                        <div class="template-name">博客模型</div>
+                        <div class="template-desc">title, content, tags, published
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-template="empty">
+                        <div class="template-icon">
+                            <i class="fas fa-file"></i>
+                        </div>
+                        <div class="template-name">空白模板</div>
+                        <div class="template-desc">从头开始创建</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局状态
+        let fields = [];
+        let toolName = '';
+        let toolDescription = '';
+
+        // DOM元素
+        const toolNameInput = document.getElementById('tool-name');
+        const toolDescriptionInput = document.getElementById('tool-description');
+        const fieldNameInput = document.getElementById('field-name');
+        const fieldTypeSelect = document.getElementById('field-type');
+        const enumOptionsGroup = document.getElementById('enum-options-group');
+        const enumOptionsInput = document.getElementById('enum-options');
+        const descriptionInput = document.getElementById('field-description');
+        const optionalCheckbox = document.getElementById('field-optional');
+        const addFieldBtn = document.getElementById('add-field-btn');
+        const fieldsContainer = document.getElementById('fields-container');
+        const noFieldsMessage = document.getElementById('no-fields-message');
+        const clearAllBtn = document.getElementById('clear-all-btn');
+        const zodOutput = document.getElementById('zod-output');
+        const jsonOutput = document.getElementById('json-output');
+        const copyCodeBtn = document.getElementById('copy-code-btn');
+        const templateCards = document.querySelectorAll('.template-card');
+
+        // 监听字段类型变化（显示/隐藏枚举选项）
+        fieldTypeSelect.addEventListener('change', () => {
+            if (fieldTypeSelect.value === 'enum') {
+                enumOptionsGroup.style.display = 'block';
+            } else {
+                enumOptionsGroup.style.display = 'none';
+            }
+        });
+
+        // 添加字段
+        addFieldBtn.addEventListener('click', () => {
+            const name = fieldNameInput.value.trim();
+            const type = fieldTypeSelect.value;
+            const description = descriptionInput.value.trim();
+            const isOptional = optionalCheckbox.checked;
+            let options = [];
+
+            if (!name) {
+                alert('请输入字段名');
+                return;
+            }
+
+            // 检查字段是否已存在
+            if (fields.some(field => field.name === name)) {
+                alert('该字段名已存在');
+                return;
+            }
+
+            // 处理枚举选项
+            if (type === 'enum') {
+                const optionsText = enumOptionsInput.value.trim();
+                if (!optionsText) {
+                    alert('请输入枚举选项');
+                    return;
+                }
+                options = optionsText.split(',').map(opt => opt.trim());
+            }
+
+            // 创建字段对象
+            const field = {
+                name,
+                type,
+                description,
+                isOptional,
+                options
+            };
+
+            fields.push(field);
+            renderFieldsList();
+            renderOutput();
+
+            // 重置表单
+            fieldNameInput.value = '';
+            descriptionInput.value = '';
+            optionalCheckbox.checked = false;
+            if (type === 'enum') {
+                enumOptionsInput.value = '';
+            }
+        });
+
+        // 清除所有字段
+        clearAllBtn.addEventListener('click', () => {
+            if (fields.length === 0 || confirm('确定要清除所有字段吗？')) {
+                fields = [];
+                renderFieldsList();
+                renderOutput();
+            }
+        });
+
+        // 复制代码
+        copyCodeBtn.addEventListener('click', () => {
+            const text = zodOutput.innerText;
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    const originalText = copyCodeBtn.innerHTML;
+                    copyCodeBtn.innerHTML = '<i class="fas fa-check"></i> 已复制';
+                    setTimeout(() => {
+                        copyCodeBtn.innerHTML = originalText;
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('复制失败:', err);
+                    alert('复制失败，请手动复制代码');
+                });
+        });
+
+        // 应用模板
+        templateCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const template = card.dataset.template;
+                applyTemplate(template);
+            });
+        });
+
+        // 渲染字段列表
+        function renderFieldsList() {
+            fieldsContainer.innerHTML = '';
+
+            if (fields.length === 0) {
+                fieldsContainer.appendChild(noFieldsMessage);
+                noFieldsMessage.style.display = 'flex';
+                return;
+            }
+
+            noFieldsMessage.style.display = 'none';
+
+            fields.forEach((field, index) => {
+                        const fieldItem = document.createElement('div');
+                        fieldItem.className = 'field-item';
+
+                        const properties = [];
+                        if (field.isOptional) {
+                            properties.push('<span class="property-indicator optional">可选</span>');
+                        } else {
+                            properties.push('<span class="property-indicator required">必填</span>');
+                        }
+
+                        if (field.type === 'enum') {
+                            properties.push(`<span class="property-indicator">枚举: ${field.options.join(', ')}</span>`);
+                        }
+
+                        fieldItem.innerHTML = `
+                    <div class="field-info">
+                        <div class="field-name">${field.name}</div>
+                        <div class="field-type">
+                            <span>类型: ${field.type}</span>
+                            ${properties.join('')}
+                        </div>
+                        ${field.description ? `<div>描述: ${field.description}</div>` : ''}
+                    </div>
+                    <div class="field-actions">
+                        <button class="btn-icon delete-btn" data-index="${index}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                fieldsContainer.appendChild(fieldItem);
+            });
+            
+            // 添加删除事件
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(e.currentTarget.dataset.index);
+                    fields.splice(index, 1);
+                    renderFieldsList();
+                    renderOutput();
+                });
+            });
+        }
+        
+        // 渲染输出
+        function renderOutput() {
+            const toolName = toolNameInput.value.trim() || 'myTool';
+            const toolDescription = toolDescriptionInput.value.trim() || '工具描述';
+            
+            // 生成schema部分
+            let schemaCode = '{\n';
+            fields.forEach(field => {
+                let zodField = '';
+                
+                switch(field.type) {
+                    case 'string':
+                        zodField = 'z.string()';
+                        break;
+                    case 'number':
+                        zodField = 'z.number()';
+                        break;
+                    case 'boolean':
+                        zodField = 'z.boolean()';
+                        break;
+                    case 'date':
+                        zodField = 'z.date()';
+                        break;
+                    case 'enum':
+                        const enumValues = field.options.map(opt => `'${opt}'`).join(', ');
+                        zodField = `z.enum([${enumValues}])`;
+                        break;
+                    default:
+                        zodField = 'z.unknown()';
+                }
+                
+                if (field.isOptional) {
+                    zodField += '.optional()';
+                }
+                
+                if (field.description) {
+                    zodField += `.describe('${field.description}')`;
+                }
+                
+                schemaCode += `    ${field.name}: ${zodField},\n`;
+            });
+            schemaCode += '  }';
+            
+            // 生成完整工具代码
+            let toolCode = `import z from 'zod';\n\n`;
+            toolCode += `export const ${toolName} = {\n`;
+            toolCode += `  name: '${toolName}',\n`;
+            toolCode += `  description: '${toolDescription}',\n`;
+            toolCode += `  schema: ${schemaCode},\n`;
+            toolCode += `  handler: async (args: any, client: any, sendNotification: any) => {\n`;
+            toolCode += `    console.log('工具参数:', args);\n\n`;
+            toolCode += `    // 在这里实现工具逻辑\n`;
+            toolCode += `    return {\n`;
+            toolCode += `      content: [{ type: 'text', text: \`处理结果: \${JSON.stringify(args)}\` }]\n`;
+            toolCode += `    };\n`;
+            toolCode += `  }\n`;
+            toolCode += `};\n`;
+            
+            // 高亮显示代码
+            const highlightedCode = highlightToolCode(toolCode);
+            zodOutput.innerHTML = highlightedCode;
+            
+            // 生成参数示例
+            const jsonExample = {};
+            fields.forEach(field => {
+                switch(field.type) {
+                    case 'string':
+                        jsonExample[field.name] = field.description || '示例字符串';
+                        break;
+                    case 'number':
+                        jsonExample[field.name] = 0;
+                        break;
+                    case 'boolean':
+                        jsonExample[field.name] = true;
+                        break;
+                    case 'date':
+                        jsonExample[field.name] = new Date().toISOString();
+                        break;
+                    case 'enum':
+                        jsonExample[field.name] = field.options[0] || '';
+                        break;
+                    default:
+                        jsonExample[field.name] = null;
+                }
+            });
+            
+            jsonOutput.textContent = JSON.stringify(jsonExample, null, 2);
+        }
+        
+        // 代码高亮
+        function highlightToolCode(code) {
+            return code
+                .replace(/(import|export|const|async|return|from)/g, '<span class="keyword">$1</span>')
+                .replace(/(name|description|schema|handler|content|type|text)/g, '<span class="type">$1</span>')
+                .replace(/(z\.\w+\(\))/g, '<span class="keyword">$1</span>')
+                .replace(/('.*?')/g, '<span class="string">$1</span>')
+                .replace(/(\/\/ .*$)/gm, '<span class="comment">$1</span>');
+        }
+        
+        // 应用模板
+        function applyTemplate(template) {
+            switch(template) {
+                case 'mcp-tool':
+                    fields = [
+                        { name: 'message', type: 'string', description: '消息内容', isOptional: false }
+                    ];
+                    toolNameInput.value = 'hello';
+                    toolDescriptionInput.value = 'Hello World示例工具';
+                    break;
+                    
+                case 'user':
+                    fields = [
+                        { name: 'id', type: 'number', description: '用户唯一标识', isOptional: false },
+                        { name: 'username', type: 'string', description: '用户名', isOptional: false },
+                        { name: 'email', type: 'string', description: '电子邮件地址', isOptional: false },
+                        { name: 'role', type: 'enum', description: '用户角色', isOptional: true, options: ['admin', 'user', 'guest'] },
+                        { name: 'isActive', type: 'boolean', description: '是否激活', isOptional: true }
+                    ];
+                    toolNameInput.value = 'userManager';
+                    toolDescriptionInput.value = '用户管理工具';
+                    break;
+                    
+                case 'product':
+                    fields = [
+                        { name: 'id', type: 'number', description: '产品ID', isOptional: false },
+                        { name: 'title', type: 'string', description: '产品标题', isOptional: false },
+                        { name: 'description', type: 'string', description: '产品描述', isOptional: true },
+                        { name: 'price', type: 'number', description: '产品价格', isOptional: false },
+                        { name: 'inStock', type: 'boolean', description: '是否有库存', isOptional: false }
+                    ];
+                    break;
+                    
+                case 'address':
+                    fields = [
+                        { name: 'street', type: 'string', description: '街道地址', isOptional: false },
+                        { name: 'city', type: 'string', description: '城市', isOptional: false },
+                        { name: 'zipCode', type: 'string', description: '邮政编码', isOptional: false },
+                        { name: 'country', type: 'string', description: '国家', isOptional: false }
+                    ];
+                    break;
+                    
+                case 'settings':
+                    fields = [
+                        { name: 'theme', type: 'enum', description: '主题设置', isOptional: false, options: ['light', 'dark', 'system'] },
+                        { name: 'notifications', type: 'boolean', description: '是否启用通知', isOptional: false },
+                        { name: 'language', type: 'enum', description: '界面语言', isOptional: false, options: ['zh-CN', 'en-US', 'es-ES'] }
+                    ];
+                    break;
+                    
+                case 'blog':
+                    fields = [
+                        { name: 'title', type: 'string', description: '文章标题', isOptional: false },
+                        { name: 'content', type: 'string', description: '文章内容', isOptional: false },
+                        { name: 'tags', type: 'string', description: '标签（逗号分隔）', isOptional: true },
+                        { name: 'publishedAt', type: 'date', description: '发布日期', isOptional: false }
+                    ];
+                    break;
+                    
+                case 'empty':
+                    fields = [];
+                    break;
+            }
+            
+            renderFieldsList();
+            renderOutput();
+        }
+        
+        // 初始化
+        renderFieldsList();
+        renderOutput();
+    </script>
+</body>
+
+</html>

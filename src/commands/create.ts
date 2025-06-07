@@ -1,4 +1,3 @@
-import { exec } from 'child_process';
 import { resolve } from 'path';
 import chalk from 'chalk';
 import open from 'open';
@@ -11,12 +10,9 @@ interface CreateOptions {
 export async function create(options: CreateOptions = {}) {
   const port = options.port || 3366;
   const app = express();
-  
-  // 获取index.html的绝对路径
-  const indexPath = resolve(__dirname, '../..', 'index.html');
-  
+   console.log(resolve(__filename, '../../'))
   // 设置静态文件服务
-  app.use(express.static(resolve(__dirname, '../..')));
+  app.use(express.static(resolve(__filename, '../../')));
   
   // 启动服务器
   const server = app.listen(port, () => {

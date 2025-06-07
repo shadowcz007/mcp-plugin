@@ -11,10 +11,9 @@ const express_1 = __importDefault(require("express"));
 async function create(options = {}) {
     const port = options.port || 3366;
     const app = (0, express_1.default)();
-    // 获取index.html的绝对路径
-    const indexPath = (0, path_1.resolve)(__dirname, '../..', 'index.html');
+    console.log((0, path_1.resolve)(__filename, '../../'));
     // 设置静态文件服务
-    app.use(express_1.default.static((0, path_1.resolve)(__dirname, '../..')));
+    app.use(express_1.default.static((0, path_1.resolve)(__filename, '../../')));
     // 启动服务器
     const server = app.listen(port, () => {
         console.log(chalk_1.default.blue(`🚀 工具生成器已启动！`));
