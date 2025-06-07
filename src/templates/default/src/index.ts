@@ -6,6 +6,7 @@ interface Client {
   hasToolAvailable: (toolName: string) => Promise<boolean>
   listTools: () => Promise<Array<any>>
   findTool: (toolName: string) => Promise<any>
+  createDatabase: () => Promise<any>
 }
 
 interface Server {
