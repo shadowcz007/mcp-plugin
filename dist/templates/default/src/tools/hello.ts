@@ -8,6 +8,10 @@ export const hello = {
   },
   handler: async (args: any, client: any, sendNotification: any) => {
     console.log(args)
+    // client.createDatabase 
+    // client.callTool 
+    // client.listTools
+    
     return {
       content: [{ type: 'text', text: `Echo: ${JSON.stringify(args)}` }]
     }

@@ -16,7 +16,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js']
   },
   output: {
-    filename: package.name + '.js',
+    filename: package.name + '.cjs',
     path: path.resolve(__dirname, 'dist'),
     library: {
       type: 'commonjs2'

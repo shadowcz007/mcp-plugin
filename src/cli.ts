@@ -2,6 +2,7 @@
 import { Command } from 'commander';
 import { init } from './commands/init';
 import chalk from 'chalk';
+import { create } from './commands/create';
 
 const program = new Command();
 
@@ -25,6 +26,13 @@ program
       console.error(chalk.red('Error:'), error instanceof Error ? error.message : String(error));
       process.exit(1);
     }
+  });
+
+program.command('create')
+  .description('Create a new MCP plugin')
+  .action(async () => {
+    console.log(chalk.blue('🚀 Starting plugin creation...'));
+    await create();
   });
 
 program.parse(); 

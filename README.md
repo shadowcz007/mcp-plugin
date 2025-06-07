@@ -86,6 +86,23 @@ English: After building, you can start the MCP Server and load your plugin using
 mcp_server-win-x64.exe --mcp-js ./dist/index.js
 ```
 
+### 通过表单创建工具 | Create Tool via Form
+
+中文 | English
+---|---
+你可以通过可视化表单快速生成自定义工具代码：| You can quickly generate custom tool code via a visual form:
+
+```bash
+mcp-plugin create
+```
+
+- 启动后会自动打开浏览器，访问本地工具生成器页面（默认端口 3366）。| After running, your browser will open the local tool generator page (default port 3366).
+- 在左侧填写工具名称、描述和参数字段，支持多种类型（字符串、数字、布尔、日期、枚举等）。| Fill in tool name, description, and parameter fields on the left. Multiple types supported (string, number, boolean, date, enum, etc).
+- 可添加多个参数字段，并设置是否为可选。| You can add multiple parameter fields and set them as optional.
+- 中间区域实时预览生成的 TypeScript 工具代码和参数示例。| The center area previews the generated TypeScript tool code and parameter example in real time.
+- 右侧可选择常用模板快速开始。| The right area provides common templates for quick start.
+- 点击"Copy Code" to copy the generated code, then paste it into your project's `src/tools` directory for use.
+
 ## 默认模板工具示例 | Default Template Tool Examples
 
 ### 1. test-echo

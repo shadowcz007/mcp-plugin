@@ -6,6 +6,7 @@ interface Client {
   hasToolAvailable: (toolName: string) => Promise<boolean>
   listTools: () => Promise<Array<any>>
   findTool: (toolName: string) => Promise<any>
+  createDatabase: () => Promise<any>
 }
 
 interface Server {
@@ -13,7 +14,10 @@ interface Server {
     name: string,
     description: string,
     schema: Record<string, any>,
-    handler: (args: any, { sendNotification }: { sendNotification: any }) => Promise<any>
+    handler: (
+      args: any,
+      { sendNotification }: { sendNotification: any }
+    ) => Promise<any>
   ) => void
   _client: Client
   _sendLoggingMessage: (message: any) => void
@@ -41,7 +45,8 @@ export function configureMcp (
         tool.name,
         tool.description,
         tool.schema,
-        (args: any, { sendNotification }) => {
+        (args: any, e: any) => {
+          const sendNotification = e?.sendNotification || (() => {})
           return tool.handler(args, server._client, sendNotification)
         }
       )

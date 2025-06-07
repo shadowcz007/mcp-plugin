@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const commander_1 = require("commander");
 const init_1 = require("./commands/init");
 const chalk_1 = __importDefault(require("chalk"));
+const create_1 = require("./commands/create");
 const program = new commander_1.Command();
 // 设置版本号和描述
 program
@@ -28,5 +29,11 @@ program
         console.error(chalk_1.default.red('Error:'), error instanceof Error ? error.message : String(error));
         process.exit(1);
     }
+});
+program.command('create')
+    .description('Create a new MCP plugin')
+    .action(async () => {
+    console.log(chalk_1.default.blue('🚀 Starting plugin creation...'));
+    await (0, create_1.create)();
 });
 program.parse();
