@@ -21,5 +21,12 @@ module.exports = {
     library: {
       type: 'commonjs2'
     }
+  },
+  externals: {
+    fs: 'commonjs fs',
+    path: 'commonjs path',
+    crypto: 'commonjs crypto',
+    buffer: 'commonjs buffer',
+    stream: 'commonjs stream'
   }
 }

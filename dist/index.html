@@ -710,7 +710,7 @@
                         zodField = 'z.boolean()';
                         break;
                     case 'date':
-                        zodField = 'z.date()';
+                        zodField = 'z.string().datetime()';
                         break;
                     case 'enum':
                         const enumValues = field.options.map(opt => `'${opt}'`).join(', ');
