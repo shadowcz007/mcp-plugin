@@ -1,0 +1,52 @@
+{
+    "name": "social_info_collector",
+    "description": "用户的社交信息，包括姓名、号码、公司信息和社交偏好，以便后续进行朋友推荐。",
+    "fields": [{
+            "name": "nick_name",
+            "type": "string",
+            "isOptional": false,
+            "description": "用户昵称"
+        },
+        {
+            "name": "user_number",
+            "type": "number",
+            "isOptional": false,
+            "description": "用户编号"
+        },
+        {
+            "name": "company_name",
+            "type": "string",
+            "isOptional": false,
+            "description": "公司名称"
+        },
+        {
+            "name": "company_business",
+            "type": "string",
+            "isOptional": false,
+            "description": "公司业务"
+        },
+        {
+            "name": "want_to_know",
+            "type": "string",
+            "isOptional": false,
+            "description": "最想认识什么方向的朋友"
+        }
+    ],
+    "tools": {
+        "query": {
+            "active": true,
+            "syncToBackend": true,
+            "excludeFields": ["user_id", "device_id"]
+        },
+        "record": {
+            "active": false,
+            "syncToBackend": true
+        },
+        "update": {
+            "active": true,
+            "syncToBackend": true,
+            "updateByFields": ["user_number"],
+            "excludeFields": ["user_id", "device_id", "result"]
+        }
+    }
+}

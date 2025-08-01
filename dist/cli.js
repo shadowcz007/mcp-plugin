@@ -18,7 +18,7 @@ program
 program
     .command('init [path]')
     .description('Initialize a new MCP project. Use "." to create in current directory')
-    .option('-t, --template <template>', 'Template to use', 'default')
+    .option('-t, --template <template>', 'Template to use (default | social-recommendation)', 'default')
     .action(async (path, options) => {
     console.log(chalk_1.default.blue('🚀 Starting project initialization...'));
     try {

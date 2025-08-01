@@ -1,0 +1,37 @@
+{
+    "name": "social_topic",
+    "description": "基于上下文，推荐社交话题，避免冷场，提高聊天质量",
+    "fields": [{
+            "name": "topic",
+            "type": "string",
+            "isOptional": false,
+            "description": "推荐社交话题"
+        },
+        {
+            "name": "source",
+            "type": "string",
+            "isOptional": false,
+            "description": "用户编号和昵称"
+        },
+        {
+            "name": "target",
+            "type": "string",
+            "isOptional": false,
+            "description": "用户编号和昵称"
+        }
+    ],
+    "tools": {
+        "query": {
+            "active": true,
+            "syncToBackend": true
+        },
+        "record": {
+            "active": false,
+            "syncToBackend": false
+        },
+        "update": {
+            "active": false,
+            "syncToBackend": false
+        }
+    }
+}

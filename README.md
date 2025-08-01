@@ -9,7 +9,7 @@ This is an MCP plugin project that provides a scaffold for quickly creating MCP 
 中文 | English
 ---|---
 提供命令行工具，快速创建 MCP 插件项目 | Command-line tool for rapid MCP plugin project creation
-内置默认模板，包含基础工具示例 | Built-in default templates with basic tool examples
+内置多个模板，包含基础工具示例和完整应用模板 | Built-in multiple templates with basic tool examples and complete application templates
 支持 TypeScript 开发环境 | TypeScript development environment support
 集成测试框架（Jest） | Integrated testing framework (Jest)
 
@@ -32,20 +32,42 @@ npm install mcp-plugin
 ### 创建新项目 | Create New Project
 
 ```bash
-# 创建新项目 | Create new project
+# 创建新项目（交互式选择模板）| Create new project (interactive template selection)
 mcp-plugin init
 
 # 使用指定模板创建项目 | Create project with specific template
-mcp-plugin init -t template-name
+mcp-plugin init -t default
+mcp-plugin init -t social-recommendation
 ```
 
 创建项目过程中会提示输入：| During project creation, you'll be prompted for:
 
 中文 | English
 ---|---
+模板选择 | Template selection
 项目名称 | Project name
 项目描述 | Project description
 作者信息 | Author information
+
+## 可用模板 | Available Templates
+
+### 1. Default Template (基础模板)
+
+中文 | English
+---|---
+功能：包含基础工具示例的简单模板 | Function: Simple template with basic tool examples
+特点：快速开始，适合学习 | Features: Quick start, suitable for learning
+工具示例：hello, get-current-time, math-add | Tool examples: hello, get-current-time, math-add
+
+### 2. Social Recommendation (社交推荐系统)
+
+中文 | English
+---|---
+功能：包含数据库支持的社交推荐系统模板 | Function: Social recommendation system template with database support
+特点：完整的业务应用，包含数据库操作 | Features: Complete business application with database operations
+工具示例：social_info_collector, social_topic | Tool examples: social_info_collector, social_topic
+数据库：SQLite 集成 | Database: SQLite integration
+功能：用户信息收集、话题推荐、CRUD 操作 | Features: User info collection, topic recommendation, CRUD operations
 
 ### 与 MCP Server 集成 | Integration with MCP Server
 
@@ -54,7 +76,11 @@ mcp-plugin init -t template-name
 English: After building, you can start the MCP Server and load your plugin using:
 
 ```bash
+# 基础模板
 mcp_server-win-x64.exe --mcp-js ./dist/index.js
+
+# 社交推荐系统模板
+mcp_server-win-x64.exe --mcp-js ./dist/index.js --database-path ./db/social.sqlite --user-id user123 --user-name "John Doe"
 ```
 
 ### 通过表单创建工具 | Create Tool via Form

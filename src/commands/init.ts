@@ -11,7 +11,22 @@ interface ProjectAnswers {
   name: string
   description: string
   author: string
+  template: string
 }
+
+// 可用的模板列表
+const AVAILABLE_TEMPLATES = [
+  {
+    name: 'Default Template (基础模板)',
+    value: 'default',
+    description: '包含基础工具示例的简单模板'
+  },
+  {
+    name: 'Social Recommendation (社交推荐系统)',
+    value: 'social-recommendation',
+    description: '包含数据库支持的社交推荐系统模板'
+  }
+]
 
 export async function init (
   options: InitOptions & { path?: string }
@@ -39,6 +54,21 @@ export async function init (
     await fs.ensureDir(targetDir)
   }
 
+  // 询问模板选择（如果没有通过命令行指定）
+  let selectedTemplate = options.template
+  if (!selectedTemplate || selectedTemplate === 'default') {
+    const { template } = await inquirer.prompt<{ template: string }>([
+      {
+        type: 'list',
+        name: 'template',
+        message: 'Select a template:',
+        choices: AVAILABLE_TEMPLATES,
+        default: 'default'
+      }
+    ])
+    selectedTemplate = template
+  }
+
   // 继续询问其他信息
   const answers = await inquirer.prompt<ProjectAnswers>([
     {
@@ -54,20 +84,22 @@ export async function init (
   ])
 
   answers.name = projectName // 使用之前确定的项目名称
+  answers.template = selectedTemplate
 
   // 获取当前包的根目录
   const pkgPath = path.resolve(__dirname, '../../package.json')
   const pkgDir = path.dirname(pkgPath)
-  const templateDir = path.join(pkgDir, 'dist/templates', options.template)
+  const templateDir = path.join(pkgDir, 'dist/templates', selectedTemplate)
 
   console.log('Debug - Package directory:', pkgDir)
   console.log('Debug - Template directory:', templateDir)
+  console.log('Debug - Selected template:', selectedTemplate)
 
   try {
     // 检查模板是否存在
     if (!(await fs.pathExists(templateDir))) {
       throw new Error(
-        `Template "${options.template}" not found at ${templateDir}`
+        `Template "${selectedTemplate}" not found at ${templateDir}`
       )
     }
 
@@ -103,6 +135,16 @@ export async function init (
     console.log(chalk.white('  1. cd', answers.name))
     console.log(chalk.white('  2. npm install'))
     console.log(chalk.white('  3. npm start'))
+    
+    // 根据模板类型显示不同的提示信息
+    if (selectedTemplate === 'social-recommendation') {
+      console.log(chalk.cyan('\n📋 Social Recommendation Template Features:'))
+      console.log(chalk.white('  - Database integration with SQLite'))
+      console.log(chalk.white('  - Social information collection'))
+      console.log(chalk.white('  - Topic recommendation system'))
+      console.log(chalk.white('  - Complete CRUD operations'))
+      console.log(chalk.white('\n  Usage: npm run dev'))
+    }
   } catch (error) {
     throw new Error(
       `Failed to initialize project: ${

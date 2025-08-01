@@ -41,6 +41,19 @@ const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 const inquirer_1 = __importDefault(require("inquirer"));
 const chalk_1 = __importDefault(require("chalk"));
+// 可用的模板列表
+const AVAILABLE_TEMPLATES = [
+    {
+        name: 'Default Template (基础模板)',
+        value: 'default',
+        description: '包含基础工具示例的简单模板'
+    },
+    {
+        name: 'Social Recommendation (社交推荐系统)',
+        value: 'social-recommendation',
+        description: '包含数据库支持的社交推荐系统模板'
+    }
+];
 async function init(options) {
     let targetDir;
     let projectName;
@@ -64,6 +77,20 @@ async function init(options) {
         // 创建项目目录
         await fs.ensureDir(targetDir);
     }
+    // 询问模板选择（如果没有通过命令行指定）
+    let selectedTemplate = options.template;
+    if (!selectedTemplate || selectedTemplate === 'default') {
+        const { template } = await inquirer_1.default.prompt([
+            {
+                type: 'list',
+                name: 'template',
+                message: 'Select a template:',
+                choices: AVAILABLE_TEMPLATES,
+                default: 'default'
+            }
+        ]);
+        selectedTemplate = template;
+    }
     // 继续询问其他信息
     const answers = await inquirer_1.default.prompt([
         {
@@ -78,16 +105,18 @@ async function init(options) {
         }
     ]);
     answers.name = projectName; // 使用之前确定的项目名称
+    answers.template = selectedTemplate;
     // 获取当前包的根目录
     const pkgPath = path.resolve(__dirname, '../../package.json');
     const pkgDir = path.dirname(pkgPath);
-    const templateDir = path.join(pkgDir, 'dist/templates', options.template);
+    const templateDir = path.join(pkgDir, 'dist/templates', selectedTemplate);
     console.log('Debug - Package directory:', pkgDir);
     console.log('Debug - Template directory:', templateDir);
+    console.log('Debug - Selected template:', selectedTemplate);
     try {
         // 检查模板是否存在
         if (!(await fs.pathExists(templateDir))) {
-            throw new Error(`Template "${options.template}" not found at ${templateDir}`);
+            throw new Error(`Template "${selectedTemplate}" not found at ${templateDir}`);
         }
         // 复制模板文件
         await fs.copy(templateDir, targetDir, {
@@ -118,6 +147,15 @@ async function init(options) {
         console.log(chalk_1.default.white('  1. cd', answers.name));
         console.log(chalk_1.default.white('  2. npm install'));
         console.log(chalk_1.default.white('  3. npm start'));
+        // 根据模板类型显示不同的提示信息
+        if (selectedTemplate === 'social-recommendation') {
+            console.log(chalk_1.default.cyan('\n📋 Social Recommendation Template Features:'));
+            console.log(chalk_1.default.white('  - Database integration with SQLite'));
+            console.log(chalk_1.default.white('  - Social information collection'));
+            console.log(chalk_1.default.white('  - Topic recommendation system'));
+            console.log(chalk_1.default.white('  - Complete CRUD operations'));
+            console.log(chalk_1.default.white('\n  Usage: npm run dev'));
+        }
     }
     catch (error) {
         throw new Error(`Failed to initialize project: ${error instanceof Error ? error.message : String(error)}`);
